@@ -41,7 +41,7 @@ else
 			$variableId = (int)$_REQUEST[id];
 			$translationId = (int)$_REQUEST[tid];
 			
-			$conn->beginTransaction();
+			$conn->autocommit(FALSE);
 			
 			//Find whether this user has already rated this translation
 			$previousVote = $conn->queryOne("SELECT vote FROM votes WHERE translation_id = $translationId AND user_id = $userId");
@@ -65,6 +65,7 @@ else
 				$conn->exec("UPDATE variables SET accepted_translation_id = $translationId WHERE variable_id = $variableId");
 			
 			$conn->commit();
+			$conn->autocommit(TRUE);
 			
 			echo "1";
 			exit();
@@ -86,13 +87,15 @@ function loadTranslations($resourceId, $languageCode, $condition = "")
 {
 	global $conn;
 	global $userId;
+
 	if (strlen($condition) > 0) $condition .= " and";
-	$variables = $conn->queryAll("SELECT v.* FROM variables v WHERE $condition resource_id = $resourceId order by name",null, null, true);
+	$variables = $conn->queryAllRekey("SELECT v.* FROM variables v WHERE $condition resource_id = $resourceId order by name");
+
 	$query = "SELECT t.*, u.*, vo.vote as uservote FROM variables v JOIN translations t USING (variable_id) JOIN users u USING (user_id) LEFT JOIN votes vo ON vo.translation_id = t.translation_id AND vo.user_id = $userId WHERE $condition t.language_code = '$languageCode' AND v.resource_id = $resourceId ORDER BY t.variable_id, t.last_update";
-	
 	$translations = $conn->queryAll($query);
 	foreach ($translations as $translation)
 		$variables[$translation [variable_id]][translations][] = $translation;
+
 	return $variables;
 }
 
@@ -167,9 +170,7 @@ function displayVariable($id, $variable)
 	{
 		echo "<textarea class='translationEditBox getFocus' name='$id'>No translation yet.  Click to translate.</textarea>";
 	}
-	
-	
-	
+
 	echo "</td>";
 }
 ?>
@@ -185,7 +186,7 @@ function displayVariable($id, $variable)
 			<?elseif ($languageCode == $language[code]):?>
 				<span class='active'><?=$language[name]?> (<?=$language[complete]?>)</span> 
 			<?else:?>
-				<span><a href='?p=resource&r=<?=$resource[resource_id]?>&l=<?=$language[code]?>'>
+				<span><a href='/p/resource?r=<?=$resource[resource_id]?>&l=<?=$language[code]?>'>
 					<?=$language[name]?> (<?=$language[complete]?>)
 				</a></span> 
 			<?endif;?>

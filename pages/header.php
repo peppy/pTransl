@@ -3,9 +3,9 @@
 <head>
 	<title>pTransl alpha</title>
 	<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
-	<link rel="stylesheet" type="text/css" href="includes/style.css" media="all" />
+	<link rel="stylesheet" type="text/css" href="/includes/style.css" media="all" />
 	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.2.6/jquery.min.js"></script>
-	<script type="text/javascript" src="includes/main.js"></script>
+	<script type="text/javascript" src="/includes/main.js"></script>
 </head>
 <body>
 
@@ -19,13 +19,13 @@
 		<?endif;?>
 		<br/>
 		<br/>
-		<a href='?p=resource'/>Resources</a>
+		<a href='/p/resource'/>Resources</a>
 		<?if ($userId == 1):?>
-		 | <a href='?p=import'/>Import</a>
+		 | <a href='/p/import'/>Import</a>
 		<?endif;?>
 		<?if ($user):?>
-		 | <a href='?p=account'/>Account</a>
-		 | <a href='?p=logout'/>Logout</a>
+		 | <a href='/p/account'/>Account</a>
+		 | <a href='/p/logout'/>Logout</a>
 		<?endif;?>
 		
 	</div>

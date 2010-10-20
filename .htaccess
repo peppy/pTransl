@@ -1,0 +1,4 @@
+RewriteEngine On
+RewriteCond %{HTTP_HOST} !^.*.ppy.sh$ [NC]
+RewriteRule ^(.*)$ http://li.ppy.sh/$1 [R=301,L]
+RewriteRule ^p/([^/\?]*)[/]?$ /?p=$1 [QSA]

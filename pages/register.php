@@ -47,7 +47,7 @@ if (isset($_REQUEST[action]))
 				$conn->exec("INSERT INTO users (username, password, email) VALUES ('$username','$hash','$email')");
 				
 				$_SESSION[userId] = $conn->lastInsertID();
-				header("location: ?p=resource");
+				header("location: /p/resource");
 			}
 			exit();
 	}
@@ -115,7 +115,7 @@ function checkSubmission()
 </script>
 
 <div class='registrationForm'>
-	<form method='post' action='?p=register&action=register'>
+	<form method='post' action='/p/register&action=register'>
 		<table>
 			<tr>
 				<td class='left'>Desired Username:</td>

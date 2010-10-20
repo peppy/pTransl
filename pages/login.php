@@ -10,7 +10,7 @@ if (isset($_REQUEST[username]))
 	if ($userId > 0)
 	{
 		$_SESSION[userId] = $userId;
-		header("location: ?p=resource");
+		header("location: /p/resource");
 	}
 }
 ?>
@@ -35,7 +35,7 @@ if (isset($_REQUEST[username]))
 			<tr>
 				<td class='left'></td>
 				<td class='right'>
-					<a href='?p=register'>Register new account...</a>
+					<a href='/p/register'>Register new account...</a>
 				</td>
 			</tr>
 		</table>

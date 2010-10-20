@@ -1,53 +1,14 @@
 <?php
-// -------------DATABASE ACCESS--------------------------------------------------
-require_once 'MDB2.php';
-
-if (!function_exists("getDSN"))
-	{
-	function getDSN() {
-	// Database Driver
-	  $driver = "mysqli";
-	// Database Host
-	  $host = "localhost";
-	// Database Name
-	  $database = "ptransl";
-	// Database Username
-	  $user = "root";
-	// Database Password
-	  $pass = "";
-	// -------------------------------------------------------------------------------
-	  return "$driver://$user:$pass@$host/$database";
-	}
-}
 
 global $smarty, $conn;
 
 if (!isset($conn))
-{
-	$conn = getConnection();
-	$conn->setFetchMode(MDB2_FETCHMODE_ASSOC);
-	$conn->query('SET CHARACTER SET utf8');
-}
-
+	require_once("include.db.php");
+	
 if (isset($dbOnly))
 	return;
 
 require_once('smarty/libs/Smarty.class.php');
-
-function getConnection() {
-  $conn =& MDB2::connect(getDSN(),array('persistent' => TRUE));
-  if (MDB2::isError($conn)) {
-    die($conn->getUserInfo());
-  }
-  return $conn;
-}
-
-// sanitize a string for SQL input (simple slash out quotes and slashes)
-function sqlstr($string, $min='', $max='')
-{
-  $string = stripslashes( $string);
-  return addslashes($string);
-}
 
 function linkenize($str)
 {
