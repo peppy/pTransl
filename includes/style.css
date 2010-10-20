@@ -1,0 +1,297 @@
+/* GENERAL STYLES */
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: "Arial Grande", Tahoma, Helvetica, Arial, sans-serif;
+    font-size: 8pt;
+}
+
+.header
+{
+	position: relative;
+	background-color: #5070ac;
+	background-image: url(../images/header-bg.png);
+	color: #ffffff;
+}
+
+.header .left
+{
+	background-image: url(../images/header-image.png);	
+	width: 148px;
+	height: 49px;
+}
+
+.header .right
+{
+	position: absolute;
+	bottom: 0px;
+	right: 0px;
+	padding: 5px;
+	text-align: right;
+}
+
+.header > h1
+{
+	font-weight: normal;
+	font-size: 300%;
+	margin: 0px;
+}
+
+.header a
+{
+	color: #ffffff;
+	font-weight: bold;
+}
+
+.header a:hover
+{
+	color: #ffffff;	
+	text-decoration: underline;
+}
+
+.main
+{
+    background: #f6f6f6;
+    margin: 20px 10px 5px 10px;
+    padding: 5px;
+}
+
+.footer
+{
+	text-align: center;
+	padding-top: 5px;
+	height: 100%;
+}
+
+a { color: #2d7ffa; text-decoration: none; cursor: pointer;}
+a:hover { color: #000; text-decoration: none;}
+
+/* LOGIN */
+
+.registrationForm table
+{
+	width:100%;
+}
+
+.registrationForm table .left
+{
+	width: 200px;
+}
+
+.registrationForm input
+{
+	width: 180px;
+}
+
+.loginForm table
+{
+	margin: auto;
+}
+
+.loginForm input
+{
+	font-size: 200%;
+}
+
+.loginForm table .left
+{
+	text-align: right;
+	font-size: 200%;
+}
+
+.loginForm table .right
+{
+	text-align: right;
+}
+
+.valid
+{
+	display: inline-block;
+	line-height: 20px;
+	padding-left: 20px;
+	background: url('../images/valid.png');
+	background-repeat: no-repeat;
+	min-width: 20px;
+}
+
+.invalid
+{
+	display: inline-block;
+	line-height: 20px;
+	padding-left: 20px;
+	background: url('../images/invalid.png');
+	background-repeat: no-repeat;
+	min-width: 20px;
+}
+
+/* RESOURCE */
+
+.resourceList
+{
+	width: 100%;	
+}
+
+.resourceList .a > td
+{
+}
+
+.resourceList .b > td
+{
+	background-color: #f9f9f9;	
+}
+
+.resourceList th
+{
+	background: #fff;	
+}
+
+.resourceList .options
+{
+	display: inline-block;
+	background: #fff;
+	border: solid 1px #d8dfde;
+	color: #d8dfde;
+	margin-left: 10px;
+	padding: 2px;
+}
+
+.resourceList .options:hover
+{
+	border: solid 1px #ababab;
+	color: #ababab;
+}
+
+.resourceList td
+{
+	padding: 4px;
+	height: 80px;
+	vertical-align: top;
+	border-bottom: 1px solid #c9dcea;
+}
+
+.resourceList tr:hover > td
+{
+	background-color: #fff;
+}
+
+.resourceList textarea
+{
+	margin: 5px;
+	width: 80%;
+	height: 40px;
+	border: none;
+	font-family: "Arial Grande", Tahoma, Helvetica, Arial, sans-serif;
+    font-size: 8pt;
+	border: solid 1px #ddd;
+}
+
+.resourceList .resourceName
+{
+	font-weight: bold;
+	color: #999999;
+}
+
+.resourceList .userString
+{
+	color: #999999;
+}
+
+.resourceList .text
+{
+	padding-left: 4px;
+}
+.resourceList .text>span
+{
+	font-size: 140%;
+}
+
+.resourceList .text.r-2
+{
+	border-left: solid 4px red;
+}
+
+.resourceList .text.r-1
+{
+	border-left: solid 2px red;
+}
+
+.resourceList .text.r1
+{
+	border-left: solid 2px green;
+}
+
+.resourceList .text.r2
+{
+	border-left: solid 4px green;
+}
+
+.resourceList .text.r3
+{
+	border-left: solid 6px green;
+}
+
+.resourceList .text.r4
+{
+	border-left: solid 8px green;
+}
+
+.resourceList .text.r5
+{
+	border-left: solid 10px green;
+}
+
+.resourceHeader
+{
+	margin: auto;
+	text-align: center;
+	padding: 3px;
+	
+}
+
+.resourceHeader .languages
+{
+	font-size: 140%;	
+}
+
+.resourceHeader .languages > span
+{
+}
+
+.message
+{
+	font-weight: bold;
+}
+
+.gray
+{
+	color: #c7c9cc;	
+}
+
+.green
+{
+	font-style: italic;
+	color: #8ab557;
+}
+
+.active
+{
+	color: #c360e8;	
+	border-bottom: solid 1px;
+}
+
+.dirty,.dirty:hover
+{
+	background: #fff0f0;
+}
+
+.notice
+{
+	width: 100%;
+	text-align: center;
+	font-weight: bold;
+	font-size: 140%;
+	background-color: #eb100b;
+	color: #fff;
+	margin-bottom: 5px;
+}

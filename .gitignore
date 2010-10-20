@@ -1,0 +1,14 @@
+osu!.tmproj
+*.pfx
+*.user
+*DS_Store*
+*/bin/*
+*/obj/*
+*ReSharper*
+*resharper*
+*.suo
+
+osu!installer/output/*
+osu!-iPhone/Osu.xcodeproj/*
+osu!-iPhone/build/*
+osu!-iPhone/skins/*
