@@ -9,7 +9,7 @@
 			{elseif $languageCode == $languages[i].code}
 				<span class='active'>{$languages[i].name} ({$languages[i].complete})</span> 
 			{else}
-				<span><a href='?p=resource&r={$resource[resource_id]}&l={$languages[i].code}'>
+				<span><a href='/p/resource?r={$resource[resource_id]}&l={$languages[i].code}'>
 					{$languages[i].name} ({$languages[i].complete})
 				</a></span> 
 			{/if}

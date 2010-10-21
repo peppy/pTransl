@@ -46,7 +46,7 @@ if (isset($_REQUEST[action]))
 			{
 				$conn->exec("INSERT INTO users (username, password, email) VALUES ('$username','$hash','$email')");
 				
-				$_SESSION[userId] = $conn->lastInsertID();
+				$_SESSION[userId] = $conn->insert_id;
 				header("location: /p/resource");
 			}
 			exit();

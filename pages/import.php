@@ -23,7 +23,7 @@ if (isset($filename))
 	if ($resourceId == 0)
 	{
 		$conn->exec("INSERT INTO resources (name) VALUES ('$resourceName')");
-		$resourceId = $conn->lastInsertID();
+		$resourceId = $conn->insert_id;
 	}
 	
 	echo "resource id: $resourceId<br/>";
