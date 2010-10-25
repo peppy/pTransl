@@ -41,6 +41,21 @@ function mapHandlers()
 			}
 		}
 	);
+	
+	updateFilters();
+}
+
+function updateFilters()
+{
+    if ($("#showAccepted").is(":checked"))
+        $(".accepted").parent().show();
+    else
+        $(".accepted").parent().hide();
+    
+    totalCount = $(".translationRow").size();
+    visibleCount = $(".translationRow:visible").size();
+        
+    $("#filterInfo").html("Showing <b>" + visibleCount + " of " + totalCount + " translations</b>.");
 }
 
 function updateRow(variableId)

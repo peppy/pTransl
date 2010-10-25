@@ -73,7 +73,7 @@ else
 		case "redraw":
 			$variableId = (int)$_REQUEST[id];
 			$variables = loadTranslations($resourceId, $languageCode,"v.variable_id = $variableId");
-			displayVariable($variableId, $variables[$variableId]);
+			echo displayVariable($variableId, $variables[$variableId]);
 			exit();
 	}
 	
@@ -104,7 +104,8 @@ function displayVariable($id, $variable)
 {
 	global $user;
 	
-	echo "<td><div class='resourceName'>$variable[name]</div><big>$variable[comment]</big></td><td id='v$id'>";
+	$output = "";
+	$class = "";
 	
 	if (sizeof($variable[translations]) > 0)
 	{
@@ -130,49 +131,57 @@ function displayVariable($id, $variable)
 			if ($hasAccepted && $variable[accepted_translation_id] != $translation[translation_id])
 				continue;
 			
-			echo "<div class='userString'>@$translation[username] (".nicedate($translation[last_update])."):</div>
+			$output .= "<div class='userString'>@$translation[username] (".nicedate($translation[last_update])."):</div>
 						<div id='t$translation[translation_id]' class='text r$translation[rating]'>
 							<span>$translation[text]</span>";
 			if ($hasAccepted)
 			{
-				echo " <span class='green'>Accepted Translation</span>";
+				$output .= " <span class='green'>Accepted Translation</span>";
 				if (!isset($translation[uservote]) || $translation[uservote] == 1)
-					echo "<div class='options'><a onclick='return vote($translation[translation_id],$translation[variable_id],false)' >mark as wrong</a></div>";
+					$output .= "<div class='options'><a onclick='return vote($translation[translation_id],$translation[variable_id],false)' >mark as wrong</a></div>";
 			}
 			else
 			{
-				echo "<div class='options'>";
+				$output .= "<div class='options'>";
 				if ($translation[user_id] == $user[user_id])
-					echo "<a onclick='return edit($translation[translation_id],$translation[variable_id],false)' >edit</a>";
+					$output .= "<a onclick='return edit($translation[translation_id],$translation[variable_id],false)' >edit</a>";
 				else
 				{
-					echo "<a onclick='return edit($translation[translation_id],$translation[variable_id],true)' >revise</a> | ";
+					$output .= "<a onclick='return edit($translation[translation_id],$translation[variable_id],true)' >revise</a> | ";
 					if (!isset($translation[uservote]) || $translation[uservote] == -1)
-						echo "<a onclick='return vote($translation[translation_id],$translation[variable_id],true)' >correct</a> | ";
+						$output .= "<a onclick='return vote($translation[translation_id],$translation[variable_id],true)' >correct</a> | ";
 					else
-						echo "<b>correct</b> | ";
+						$output .= "<b>correct</b> | ";
 					if (!isset($translation[uservote]) || $translation[uservote] == 1)
-						echo "<a onclick='return vote($translation[translation_id],$translation[variable_id],false)' >wrong</a>";
+						$output .= "<a onclick='return vote($translation[translation_id],$translation[variable_id],false)' >wrong</a>";
 					else
-						echo "<b>wrong</b>";
+						$output .= "<b>wrong</b>";
 				}
-				echo "</div>";
+				$output .= "</div>";
 			}
-			echo "</div>";
+			$output .= "</div>";
 		}
 	}
 	
 	if ($hiddenCount > 0)
 	{
-		echo "<div class='gray'>$hiddenCount translation".($hiddenCount != 1 ? "s were" : " was")." hidden due to low ratings.</div>";
+		$output .= "<div class='gray'>$hiddenCount translation".($hiddenCount != 1 ? "s were" : " was")." hidden due to low ratings.</div>";
 	}
 	
 	if (sizeof($variable[translations]) == 0 || sizeof($variable[translations]) == $hiddenCount)
 	{
-		echo "<textarea class='translationEditBox getFocus' name='$id'>No translation yet.  Click to translate.</textarea>";
+		$output .= "<textarea class='translationEditBox getFocus' name='$id'>No translation yet.  Click to translate.</textarea>";
 	}
+	
+	if ($hasAccepted)
+		$class .= "accepted";
 
-	echo "</td>";
+	$output .= "</td>";
+	
+	//add the opening clause (so we can figure class name in the loop
+	$output = "<td><div class='resourceName'>$variable[name]</div><big>$variable[comment]</big></td><td id='v$id' class='$class'>" . $output;
+	
+	return $output;
 }
 ?>
 
@@ -193,6 +202,12 @@ function displayVariable($id, $variable)
 			<?endif;?>
 	<?endforeach;?>
 	</div>
+	<div>
+		<div>
+			<input type='checkbox' id='showAccepted' onchange='updateFilters()'/> <label for='showAccepted'>show accepted translations</label>
+		</div>
+		<div id='filterInfo'></div>
+	</div>
 </div>
 
 <?if (!$languageCode):?>
@@ -205,8 +220,8 @@ function displayVariable($id, $variable)
 		</tr>
 		<?
 		foreach($variables as $i => $variable):?>
-			<tr class='<?=($c++ % 2 ==0 ? "a" : "b")?>' id='r<?=$i?>'>
-				<?displayVariable($i, $variable);?>
+			<tr class='translationRow <?=($c++ % 2 ==0 ? "a" : "b")?>' id='r<?=$i?>'>
+				<?=displayVariable($i, $variable);?>
 			</tr>
 		<?endforeach;?>
 	</table>
