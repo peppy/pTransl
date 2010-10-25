@@ -17,7 +17,8 @@ else
 	{
 		case "update":
 			$variableId = (int)$_REQUEST[id];
-			$text = sqlstr($_REQUEST[content]);
+			
+			$text = sqlstr(str_replace('\\','\\\\',$_REQUEST[content]));
 			
 			$existing = $conn->queryAll("SELECT * FROM translations WHERE variable_id = $variableId AND user_id = $userId AND language_code = '$languageCode'");
 			
