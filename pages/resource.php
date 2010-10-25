@@ -55,10 +55,22 @@ else
 				exit();
 			}
 			
+			if ($userId == $conn->queryOne("SELECT user_id FROM translations WHERE translation_id = $translationId"))
+			{
+				if ($weight > 0)
+					$weight = 0; //don't allow a positive vote for your own translation
+				else
+					$weight = -5; //allow super down-voting for your own entries (basically revoke).
+			}
+			
 			$addWeight = $weight - $previousVote;
 			
 			$conn->exec("UPDATE translations SET rating = rating + $addWeight WHERE translation_id = $translationId");
-			$conn->exec("INSERT INTO votes VALUES ($translationId, $userId, $weight) ON DUPLICATE KEY UPDATE vote = $weight");
+			
+			if ($weight != 0)
+				$conn->exec("INSERT INTO votes VALUES ($translationId, $userId, $weight) ON DUPLICATE KEY UPDATE vote = $weight");
+			else
+				$conn->exec("DELETE FROM votes WHERE translation_id = $translationId AND user_id = $userId");
 			
 			$rating = $conn->queryOne("SELECT rating FROM translations WHERE translation_id = $translationId");
 			
@@ -87,12 +99,12 @@ $variables = loadTranslations($resourceId, $languageCode);
 function loadTranslations($resourceId, $languageCode, $condition = "")
 {
 	global $conn;
-	global $userId;
+	global $user;
 
 	if (strlen($condition) > 0) $condition .= " and";
 	$variables = $conn->queryAllRekey("SELECT v.* FROM variables v WHERE $condition resource_id = $resourceId order by name");
 
-	$query = "SELECT t.*, u.*, vo.vote as uservote FROM variables v JOIN translations t USING (variable_id) JOIN users u USING (user_id) LEFT JOIN votes vo ON vo.translation_id = t.translation_id AND vo.user_id = $userId WHERE $condition t.language_code = '$languageCode' AND v.resource_id = $resourceId ORDER BY t.variable_id, t.last_update";
+	$query = "SELECT t.*, u.*, vo.vote as uservote FROM variables v JOIN translations t USING (variable_id) JOIN users u USING (user_id) LEFT JOIN votes vo ON vo.translation_id = t.translation_id AND vo.user_id = '".$user['user_id']."' WHERE $condition t.language_code = '$languageCode' AND v.resource_id = $resourceId ORDER BY t.variable_id, t.last_update";
 	$translations = $conn->queryAll($query);
 	foreach ($translations as $translation)
 		$variables[$translation [variable_id]][translations][] = $translation;
@@ -125,6 +137,8 @@ function displayVariable($id, $variable)
 			if ($translation[rating] < -2)
 			{
 				$hiddenCount++;
+				if ($translation['user_id'] == $user['user_id'])
+					$hiddenIsUserOwned = $translation;
 				continue;
 			}
 			
@@ -144,7 +158,10 @@ function displayVariable($id, $variable)
 			{
 				$output .= "<div class='options'>";
 				if ($translation[user_id] == $user[user_id])
-					$output .= "<a onclick='return edit($translation[translation_id],$translation[variable_id],false)' >edit</a>";
+				{
+					$output .= "<a onclick='return edit($translation[translation_id],$translation[variable_id],false)' >edit</a> | ";
+					$output .= "<a onclick='return revoke($translation[translation_id],$translation[variable_id])' >revoke</a>";
+				}
 				else
 				{
 					$output .= "<a onclick='return edit($translation[translation_id],$translation[variable_id],true)' >revise</a> | ";
@@ -166,6 +183,11 @@ function displayVariable($id, $variable)
 	if ($hiddenCount > 0)
 	{
 		$output .= "<div class='gray'>$hiddenCount translation".($hiddenCount != 1 ? "s were" : " was")." hidden due to low ratings.</div>";
+		if ($hiddenIsUserOwned != null)
+		{
+			$output .= "<div class='gray'>Your translation is currently hidden. You may be able to restore this if you previously revoked it. ";
+			$output .= "<a onclick='return vote($hiddenIsUserOwned[translation_id],$hiddenIsUserOwned[variable_id],true)' >Cancel Revoke</a></div>";
+		}
 	}
 	
 	if (sizeof($variable[translations]) == 0 || sizeof($variable[translations]) == $hiddenCount)

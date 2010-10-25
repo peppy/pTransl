@@ -73,10 +73,7 @@ function edit(translationId,variableId,newEntry)
 	textField.parent().append("<textarea class='translationEditBox' id='edit"+variableId+"' name='"+variableId+"'>"+text.html()+"</textarea>");
 	
 	if (!newEntry)
-	{
 		textField.remove();
-		//textField.html("<textarea class='translationEditBox' name='"+variableId+"'>"+text.html()+"</textarea>");
-	}
 	
 	mapHandlers();
 	
@@ -92,4 +89,9 @@ function vote(translationId,variableId, positive)
 		}
 	);
 	return false;
+}
+
+function revoke(translationId,variableId)
+{
+	vote(translationId, variableId, false);
 }
