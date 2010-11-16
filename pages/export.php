@@ -25,7 +25,8 @@ foreach ($languages as $language)
 	{
 		$variableName = $variable['name'];
 		$translation = $conn->queryOne("SELECT text FROM translations WHERE variable_id = $variable[variable_id] AND language_code = '$code' order by rating desc limit 1");
-		fwrite($handle,$variableName . '=' . $translation . "\n");
+		if (strlen($translation) > 0)
+			fwrite($handle,$variableName . '=' . $translation . "\n");
 	}
 	
 	fclose($handle);
